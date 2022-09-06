@@ -1,0 +1,18 @@
+#interface {
+  display: inline-block;
+  margin: 2rem;
+  padding: 2rem 4rem;
+  border-radius: 20px;
+  border: 2px solid rgba(128, 128, 128, 0.395);
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.122) 5px 5px 30px;
+}
+
+h1,
+p {
+  color: rgb(106, 104, 104);
+}
+
+.hex-value {
+  color: black;
+}
