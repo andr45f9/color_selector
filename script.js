@@ -105,7 +105,7 @@ function convertToHSL(rgb) {
 
 //Displays the rgb, hex and hsl value in the document.
 function displayAllValues(hex, rgb, hsl) {
-  HTML.hexOutPut.textContent = `${hex}`; //adding the color value/text to the span element.
+  HTML.hexOutPut.textContent = `#${hex}`; //adding the color value/text to the span element.
   HTML.rgbOutPut.textContent = `${rgb.red}, ${rgb.green}, ${rgb.blue}`;
   HTML.hslOutPut.textContent = `${hsl.h}, ${hsl.s}%, ${hsl.l}%`;
 }
