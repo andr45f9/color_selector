@@ -18,16 +18,17 @@ function start() {
 
 //Gets the selected color form the input field and reads it in the different color values.
 function getSelectedColor() {
-  const hexValue = HTML.colorInput.value.substring(HTML.colorInput.value.lenght); //we take the color input and turns it into a hex string.
+  const hexValue = HTML.colorInput.value.substring(1); //we take the color input and turns it into a hex string.
   console.log(hexValue);
 
   const rgbValue = convertToRGB(hexValue);
   console.log(rgbValue);
 
-  const hslValue = convertToHSL(hexValue);
+  const hslValue = convertToHSL(rgbValue);
   console.log(hslValue);
 
   displayAllValues(hexValue, rgbValue, hslValue);
+  displaySelectedColor(hexValue); //Sends the value of hexValue to the mentioned function, so we can change the background color.
 }
 
 //Convert the hex value to rgb.
@@ -38,47 +39,49 @@ function convertToRGB(hex) {
   const green = parseInt("0x" + hex.substring(2, 4));
   const blue = parseInt("0x" + hex.substring(4, 6));
 
-  const rgb = `${red}, ${green}, ${blue}`;
-
-  return rgb;
+  return { red, green, blue };
 }
 
 //Convert the hex value to hsl.
-function convertToHSL(hex) {
-  //console.log(hex);
+function convertToHSL(rgb) {
+  const r = rgb.red / 255;
+  const g = rgb.green / 255;
+  const b = rgb.blue / 255;
 
-  const red = parseInt("0x" + hex.substring(0, 2)) / 255;
-  const green = parseInt("0x" + hex.substring(2, 4)) / 255;
-  const blue = parseInt("0x" + hex.substring(4, 6)) / 255;
-
+  //hue, saturation, luminance
   let h, s, l;
 
-  const min = Math.min(red, green, blue);
-  const max = Math.max(red, green, blue);
+  const min = Math.min(r, g, b);
+  const max = Math.max(r, g, b);
 
   switch (max) {
+    //if max === min
     case min:
       h = 0;
       break;
 
-    case red:
-      h = 60 * (0 + (green - blue) / (max - min));
+    //if max === r
+    case r:
+      h = 60 * (0 + (g - b) / (max - min));
       break;
 
-    case green:
-      h = 60 * (2 + (blue - red) / (max - min));
+    //if max === g
+    case g:
+      h = 60 * (2 + (b - r) / (max - min));
       break;
 
-    case blue:
-      h = 60 * (4 + (red - green) / (max - min));
+    //if max === b
+    case b:
+      h = 60 * (4 + (r - g) / (max - min));
       break;
   }
 
+  //cycle between 0 to 360 degrees
   if (h < 0) {
     h = h + 360;
   }
 
-  //calculate luminance/brightness
+  //calculate luminance
   l = (min + max) / 2;
 
   //calculate saturation
@@ -97,16 +100,17 @@ function convertToHSL(hex) {
   s = Math.round(s);
   l = Math.round(l);
 
-  const hsl = `${h}°, ${s}%, ${l}%`;
-
-  return hsl;
+  return { h, s, l };
 }
 
-//Displays the color in the different color values aswell as showing the color in the color circle.
+//Displays the rgb, hex and hsl value in the document.
 function displayAllValues(hex, rgb, hsl) {
-  HTML.hexOutPut.textContent = `#${hex}`; //adding the color value/text to the span element.
-  HTML.rgbOutPut.textContent = `${rgb}`;
-  HTML.hslOutPut.textContent = `${hsl}`;
+  HTML.hexOutPut.textContent = `${hex}`; //adding the color value/text to the span element.
+  HTML.rgbOutPut.textContent = `${rgb.red}, ${rgb.green}, ${rgb.blue}`;
+  HTML.hslOutPut.textContent = `${hsl.h}, ${hsl.s}%, ${hsl.l}%`;
+}
 
-  HTML.colorCircle.style.backgroundColor = hex;
+//Displays the slected color in the color circle.
+function displaySelectedColor(hex) {
+  HTML.colorCircle.style.backgroundColor = `#${hex}`;
 }
